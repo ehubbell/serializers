@@ -13,8 +13,13 @@ npm install @ehubbell/adapters
 ```tsx
 import React from 'react';
 
-import { BaseAdapter} from '@ehubbell/adapters';
-import { jsonApiNormalize, jsonApiNormalizeArray, jsonApiSerialize, jsonApiSerializeArray } from '@ehubbell/serializers';
+import { BaseAdapter } from '@ehubbell/adapters';
+import {
+	jsonApiNormalize,
+	jsonApiNormalizeArray,
+	jsonApiSerialize,
+	jsonApiSerializeArray,
+} from '@ehubbell/serializers';
 
 const StoreContext = React.createContext(null);
 
@@ -33,7 +38,7 @@ const StoreProvider = ({ children }) => {
 		return jsonApiNormalize(response.data, response.included);
 	};
 
-  const saveRecord = async ({ url, headers, params, data }) => {
+	const saveRecord = async ({ url, headers, params, data }) => {
 		return data.id
 			? await updateRecord({ method: 'PUT', url, headers, params, data })
 			: await createRecord({ method: 'POST', url, headers, params, data });
@@ -45,19 +50,19 @@ const StoreProvider = ({ children }) => {
 		return jsonApiNormalize(response.data, response.included);
 	};
 
-  const updateRecord = async ({ method = 'PUT', url, headers, params, data }) => {
+	const updateRecord = async ({ method = 'PUT', url, headers, params, data }) => {
 		const formattedData = isArray(data) ? jsonApiSerializeArray(data) : jsonApiSerialize(data);
 		const response = await client.storeRequest({ method, url, headers, params, data: formattedData });
 		return jsonApiNormalize(response.data, response.included);
 	};
 
-  const deleteRecord = async ({ method = 'DELETE', url, headers, params, data }) => {
+	const deleteRecord = async ({ method = 'DELETE', url, headers, params, data }) => {
 		const formattedData = isArray(data) ? jsonApiSerializeArray(data) : jsonApiSerialize(data);
 		const response = await client.storeRequest({ method, url, headers, params, data: formattedData });
 		return jsonApiNormalize(response.data, response.included);
 	};
 
-  const request = async ({ method = 'GET', url, headers, params, data }) => {
+	const request = async ({ method = 'GET', url, headers, params, data }) => {
 		return await client.apiRequest({ method, url, headers, params, data });
 	};
 
@@ -75,12 +80,15 @@ const useStore = () => {
 };
 
 export { StoreProvider, useStore };
+
 ```
 
 ## Development
-- npm link
+This project uses [yalc](https://npmjs.com/package/yalc) for local development.
+- npm run dev
 - switch to project
-- npm link <package_name>
+- npx yalc add @ehubbell/serializers
+- After that, this library should hot reload into the consuming application
 
 ## Scripts
 - We've included a couple of helpful scripts for faster development.
@@ -92,5 +100,11 @@ export { StoreProvider, useStore };
 - Edit the `.husky/pre-commit` file to change your settings
 
 ## Author
-- Eric Hubbell
+- [Eric Hubbell](http://www.erichubbell.com)
 - eric@erichubbell.com
+
+## Notes
+To see this library in action, checkout the following projects:
+- [playbooks](https://www.playbooks.xyz)
+- [playbooks blog](https://blog.playbooks.xyz)
+- [playbooks docs](https://docs.playbooks.xyz)
