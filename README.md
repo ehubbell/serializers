@@ -1,14 +1,81 @@
 # Overview
- A lightweight vite-based NPM package starter.
+ This library offers a collection of data serializers for various projects.
+ It's designed to be use in conjunction with the [@ehubbell/adapters](https://github.com/ehubbell/adapters) library though it also works well on it's own.
+ Each serializer offers a simple interface for serializing and normalizing data arrays and objects according to your specification.
+ By abstracting this logic into a package, we're able to reduce and consolidate the boilerplate code necessary for each project.
 
-## Prerequisites
-- Git
-- Node
-- NPM
+## Installation
+```
+npm install @ehubbell/adapters
+```
 
-## Quick Start
-- npm install
-- npm start
+## Usage
+```tsx
+import React from 'react';
+
+import { BaseAdapter} from '@ehubbell/adapters';
+import { jsonApiNormalize, jsonApiNormalizeArray, jsonApiSerialize, jsonApiSerializeArray } from '@ehubbell/serializers';
+
+const StoreContext = React.createContext(null);
+
+const StoreProvider = ({ children }) => {
+	// Computed
+	const client = new BaseAdapter({ domain: process.env.NEXT_PUBLIC_API_DOMAIN });
+
+	// Methods
+	const query = async ({ method = 'GET', url, headers, params }) => {
+		const response = await client.storeRequest({ method, url, headers, params });
+		return jsonApiNormalizeArray(response.data, response.included, response.meta);
+	};
+
+	const queryRecord = async ({ method = 'GET', url, headers, params }) => {
+		const response = await client.storeRequest({ method, url, headers, params });
+		return jsonApiNormalize(response.data, response.included);
+	};
+
+  const saveRecord = async ({ url, headers, params, data }) => {
+		return data.id
+			? await updateRecord({ method: 'PUT', url, headers, params, data })
+			: await createRecord({ method: 'POST', url, headers, params, data });
+	};
+
+	const createRecord = async ({ method = 'POST', url, headers, params, data }) => {
+		const formattedData = isArray(data) ? jsonApiSerializeArray(data) : jsonApiSerialize(data);
+		const response = await client.storeRequest({ method, url, headers, params, data: formattedData });
+		return jsonApiNormalize(response.data, response.included);
+	};
+
+  const updateRecord = async ({ method = 'PUT', url, headers, params, data }) => {
+		const formattedData = isArray(data) ? jsonApiSerializeArray(data) : jsonApiSerialize(data);
+		const response = await client.storeRequest({ method, url, headers, params, data: formattedData });
+		return jsonApiNormalize(response.data, response.included);
+	};
+
+  const deleteRecord = async ({ method = 'DELETE', url, headers, params, data }) => {
+		const formattedData = isArray(data) ? jsonApiSerializeArray(data) : jsonApiSerialize(data);
+		const response = await client.storeRequest({ method, url, headers, params, data: formattedData });
+		return jsonApiNormalize(response.data, response.included);
+	};
+
+  const request = async ({ method = 'GET', url, headers, params, data }) => {
+		return await client.apiRequest({ method, url, headers, params, data });
+	};
+
+	// Render
+	return (
+		<StoreContext.Provider
+			value={{ query, queryRecord, saveRecord, createRecord, updateRecord, deleteRecord, request }}>
+			{children}
+		</StoreContext.Provider>
+	);
+};
+
+const useStore = () => {
+	return React.useContext(StoreContext);
+};
+
+export { StoreProvider, useStore };
+```
 
 ## Development
 - npm link
