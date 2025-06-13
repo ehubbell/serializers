@@ -12,19 +12,19 @@ const formatLookup = type => {
 };
 
 // serialize
-export const serializeArray = (type = 'dash', data = [], attrs = []) => {
+export const serializeArray = (type = 'dash', data: any = [], attrs: string[] = []) => {
 	const serializedData = [];
 	data.map(v => serializedData.push(serializeAttrs(type, v, attrs)));
 	return serializedData;
 };
 
-export const serialize = (type = 'dash', data = {}, attrs = []) => {
+export const serialize = (type = 'dash', data = {}, attrs: string[] = []) => {
 	const serializedData = {};
 	Object.assign(serializedData, serializeAttrs(type, data, attrs));
 	return serializedData;
 };
 
-export const serializeAttrs = (type = 'dash', data = {}, attrs = []) => {
+export const serializeAttrs = (type = 'dash', data = {}, attrs: string[] = []) => {
 	const formatter = formatLookup(type);
 	const serializedData = {};
 
