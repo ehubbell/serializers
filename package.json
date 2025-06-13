@@ -1,6 +1,6 @@
 {
   "name": "@ehubbell/serializers",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A collection of data serializers for various projects.",
   "author": "Eric Hubbell<eric@erichubbell.com>",
   "license": "ISC",
