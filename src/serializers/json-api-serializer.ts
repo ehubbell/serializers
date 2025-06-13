@@ -22,21 +22,20 @@ const checkRelationships = key => {
 };
 
 // serialize
-export const jsonApiSerializeArray = (data = []) => {
+export const jsonApiSerializeArray = (data: any[] = []) => {
 	const serializedData = [];
 	data.map(d => serializedData.push(jsonApiSerializeAttrs(d)));
 	return { data: { attributes: serializedData } };
 };
 
-export const jsonApiSerialize = (data = {}) => {
+export const jsonApiSerialize = (data: any = {}) => {
 	const serializedData = jsonApiSerializeAttrs(data);
 	return { data: { attributes: serializedData } };
 };
 
-export const jsonApiSerializeAttrs = (data = {}) => {
+export const jsonApiSerializeAttrs = (data: any = {}) => {
 	const serializedAttrs = {};
 	Object.keys(data).map(key => {
-		if (checkAttrs(key).serialize === false) return;
 		if (isArray(data[key]) && isObject(data[key][0])) {
 			return (serializedAttrs[camelToDash(key)] = data[key].map(jsonApiSerializeAttrs));
 		}

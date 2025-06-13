@@ -22,20 +22,20 @@ const checkRelationships = key => {
 };
 
 // normalize
-export const jsonApiNormalizeArray = (data = [], included = [], meta = {}) => {
+export const jsonApiNormalizeArray = (data: any[] = [], included: any[] = [], meta: any = {}) => {
 	const normalizedArray = { data: [], meta: {} };
 	data.map(v => normalizedArray.data.push(jsonApiNormalizeAttrs(v, included)));
 	normalizedArray.meta = jsonApiNormalizeMeta(meta);
 	return normalizedArray;
 };
 
-export const jsonApiNormalize = (data = {}, included = []) => {
+export const jsonApiNormalize = (data: any = {}, included: any[] = []) => {
 	const normalizedData = { data: {} };
 	normalizedData.data = jsonApiNormalizeAttrs(data, included);
 	return normalizedData;
 };
 
-export const jsonApiNormalizeAttrs = (data = {}, included = []) => {
+export const jsonApiNormalizeAttrs = (data: any = {}, included: any[] = []) => {
 	const normalizedAttrs = {};
 	Object.keys(data).map(key => {
 		if (checkAttrs(key).normalize === false) return;
@@ -53,7 +53,7 @@ export const jsonApiNormalizeAttrs = (data = {}, included = []) => {
 	return normalizedAttrs;
 };
 
-export const jsonApiNormalizeRelationships = (data = [], included) => {
+export const jsonApiNormalizeRelationships = (data: any[] = [], included) => {
 	const normalizedAttrs = {};
 
 	Object.keys(data).map(key => {
