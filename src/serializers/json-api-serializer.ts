@@ -1,4 +1,4 @@
-import { isArray, isObject, camelToDash } from '@ehubbell/utils';
+import { isArray, isObject, camelToDash, camelToUnderscore, dashToCamel } from '@ehubbell/utils';
 
 // Helpers
 const attrs = {
@@ -10,6 +10,17 @@ const attrs = {
 const relationships = {};
 
 // Helpers
+const formatLookup = type => {
+	switch (type) {
+		case 'camel':
+			return dashToCamel;
+		case 'dash':
+			return camelToDash;
+		case 'underscore':
+			return camelToUnderscore;
+	}
+};
+
 const checkAttrs = key => {
 	const keys = Object.keys(attrs);
 	return keys.includes(key) ? attrs[key] : {};
@@ -33,18 +44,19 @@ export const jsonApiSerialize = (data: any = {}) => {
 };
 
 export const jsonApiSerializeAttrs = (data: any = {}) => {
+	const formatter = formatLookup('camel');
 	const serializedAttrs = {};
 	Object.keys(data).map(key => {
 		if (isArray(data[key]) && isObject(data[key][0])) {
-			return (serializedAttrs[camelToDash(key)] = data[key].map(jsonApiSerializeAttrs));
+			return (serializedAttrs[formatter(key)] = data[key].map(jsonApiSerializeAttrs));
 		}
 		if (isArray(data[key])) {
-			return (serializedAttrs[camelToDash(key)] = data[key]);
+			return (serializedAttrs[formatter(key)] = data[key]);
 		}
 		if (isObject(data[key])) {
-			return (serializedAttrs[camelToDash(key)] = jsonApiSerializeAttrs(data[key]));
+			return (serializedAttrs[formatter(key)] = jsonApiSerializeAttrs(data[key]));
 		}
-		return (serializedAttrs[camelToDash(key)] = data[key]);
+		return (serializedAttrs[formatter(key)] = data[key]);
 	});
 	return serializedAttrs;
 };

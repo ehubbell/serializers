@@ -1,8 +1,10 @@
-import { isArray, isEmpty, isObject, camelToDash, camelToUnderscore } from '@ehubbell/utils';
+import { isArray, isEmpty, isObject, camelToDash, camelToUnderscore, dashToCamel } from '@ehubbell/utils';
 
 // Helpers
 const formatLookup = type => {
 	switch (type) {
+		case 'camel':
+			return dashToCamel;
 		case 'dash':
 			return camelToDash;
 		case 'underscore':
