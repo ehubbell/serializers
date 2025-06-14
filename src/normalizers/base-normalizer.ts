@@ -1,5 +1,4 @@
-import { isArray, isObject } from 'utils/helpers';
-import { dashToCamel, dashToUnderscore } from 'utils/transforms';
+import { isArray, isObject, dashToCamel, dashToUnderscore } from '@ehubbell/utils';
 
 // Helpers
 const formatLookup = type => {

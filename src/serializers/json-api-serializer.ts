@@ -1,5 +1,4 @@
-import { isArray, isObject } from 'utils/helpers';
-import { camelToDash } from 'utils/transforms';
+import { isArray, isObject, camelToDash } from '@ehubbell/utils';
 
 // Helpers
 const attrs = {

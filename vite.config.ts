@@ -22,10 +22,14 @@ export default defineConfig(({ mode }) => {
 		base: './',
 		build: {
 			lib: {
-				entry: path.resolve(__dirname, 'src/index.ts'),
+				entry: [
+					path.resolve(__dirname, 'src/index.ts'),
+					path.resolve(__dirname, 'src/normalizers/normalizers.ts'),
+					path.resolve(__dirname, 'src/serializers/serializers.ts'),
+				],
 				name: 'Serializes',
 				formats: ['es', 'cjs'],
-				fileName: format => `index.${format}.js`,
+				fileName: (format, entryName) => (format === 'es' ? `${entryName}.mjs` : `${entryName}.cjs`),
 			},
 		},
 		plugins,
